@@ -37,15 +37,15 @@ export const authOptions: NextAuthOptions = {
   },
   theme: {
     colorScheme: "light",
-    logo: "/logo.png",
+    logo: "/logo.svg    ",
   },
   callbacks: {
-    async session({ session, token, user }) {
+    async session({ session }) {
       const email = session?.user?.email as string;
 
       try {
         const data = (await getUser(email)) as { user: UserProfile };
-
+        console.log(`new session`, data);
         const newSession = {
           ...session,
           user: {
@@ -67,7 +67,9 @@ export const authOptions: NextAuthOptions = {
           user: UserProfile;
         };
 
-        if (!userExists) {
+        console.log(`user exists`, userExists);
+
+        if (!userExists.user) {
           await createUser(
             user.name as string,
             user.email as string,

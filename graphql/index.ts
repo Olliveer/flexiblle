@@ -1,4 +1,4 @@
-export const getUSerQuery = `
+export const getUserQuery = `
 query GetUser($email: String!) {
   user(by: {email: $email}) {
     id
@@ -8,7 +8,7 @@ query GetUser($email: String!) {
     description
     githubUrl
     linkedinUrl
-    }
+  }
 }
 `;
 
