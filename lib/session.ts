@@ -1,11 +1,11 @@
-import { SessionInterface, UserProfile } from "@/model/global";
-import { NextAuthOptions, User } from "next-auth";
-import { AdapterUser } from "next-auth/adapters";
-import { getServerSession } from "next-auth/next";
-import GoogleProvieder from "next-auth/providers/google";
-import { createUser, getUser } from "./actions";
-import jsonwebtoken from "jsonwebtoken";
-import { JWT } from "next-auth/jwt";
+import { SessionInterface, UserProfile } from '@/model/global';
+import { NextAuthOptions, User } from 'next-auth';
+import { AdapterUser } from 'next-auth/adapters';
+import { getServerSession } from 'next-auth/next';
+import GoogleProvieder from 'next-auth/providers/google';
+import { createUser, getUser } from './actions';
+import jsonwebtoken from 'jsonwebtoken';
+import { JWT } from 'next-auth/jwt';
 
 export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
@@ -21,7 +21,7 @@ export const authOptions: NextAuthOptions = {
       const encodedToken = jsonwebtoken.sign(
         {
           ...token,
-          iss: "grafbase",
+          iss: 'grafbase',
           exp: Math.floor(Date.now() / 1000) + 60 * 60,
         },
         secret
@@ -36,8 +36,8 @@ export const authOptions: NextAuthOptions = {
     },
   },
   theme: {
-    colorScheme: "light",
-    logo: "/logo.svg    ",
+    colorScheme: 'light',
+    logo: '/logo.svg    ',
   },
   callbacks: {
     async session({ session }) {
@@ -45,7 +45,7 @@ export const authOptions: NextAuthOptions = {
 
       try {
         const data = (await getUser(email)) as { user: UserProfile };
-        console.log(`new session`, data);
+
         const newSession = {
           ...session,
           user: {
@@ -66,8 +66,6 @@ export const authOptions: NextAuthOptions = {
         const userExists = (await getUser(user.email as string)) as {
           user: UserProfile;
         };
-
-        console.log(`user exists`, userExists);
 
         if (!userExists.user) {
           await createUser(
