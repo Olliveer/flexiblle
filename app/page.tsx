@@ -5,8 +5,6 @@ import LoadMore from '@/components/LoadMore';
 import ProjectCard from '@/components/ProjectCard';
 import { fecthAllProjects } from '@/lib/actions';
 import { ProjectInterface } from '@/model/global';
-import { signOut } from 'next-auth/react';
-import Image from 'next/image';
 
 type Edge = {
   node: ProjectInterface;
