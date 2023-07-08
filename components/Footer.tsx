@@ -1,7 +1,7 @@
-import { footerLinks } from "@/constants";
-import Image from "next/image";
-import Link from "next/link";
-import React from "react";
+import { footerLinks } from '@/constants';
+import Image from 'next/image';
+import Link from 'next/link';
+import React from 'react';
 
 type ColumnProps = {
   title: string;
@@ -9,7 +9,7 @@ type ColumnProps = {
 };
 
 const FooterColumn = ({ title, links }: ColumnProps) => (
-  <div className="footer_column">
+  <div className="flex min-w-max flex-1 flex-col gap-3 text-sm">
     <h4 className="font-semibold">{title}</h4>
     <ul className="flex flex-col gap-2 font-normal">
       {links.map((link) => (
@@ -23,11 +23,11 @@ const FooterColumn = ({ title, links }: ColumnProps) => (
 
 function Footer() {
   return (
-    <footer className="flexStart footer">
+    <footer className="bg-light-white flex w-full flex-col items-center justify-between gap-20  px-5 py-6 lg:px-20">
       <div className="flex w-full flex-col gap-12">
         <div className="flex-start flex flex-col">
           <Image
-            src={"/logo-purple.svg"}
+            src={'/logo-purple.svg'}
             width={115}
             height={43}
             alt="Flexiblle"
@@ -72,7 +72,7 @@ function Footer() {
         </div>
       </div>
 
-      <div className="flexBetween footer_copyright">
+      <div className="flex w-full items-center justify-between text-sm font-normal max-sm:flex-col">
         <p>@ 2023 Flexiblles. All rights reserved</p>
 
         <p className="text-gray">

@@ -10,8 +10,8 @@ type Props = {
 };
 
 const ProfilePage = ({ user }: Props) => (
-  <section className="flexCenter paddings mx-auto w-full max-w-10xl flex-col">
-    <section className="flexBetween w-full gap-10 max-lg:flex-col">
+  <section className="max-w-10xl mx-auto flex w-full flex-col items-center justify-center px-5 py-6 lg:px-20">
+    <section className="flex w-full items-center justify-between gap-10 max-lg:flex-col">
       <div className="flex w-full flex-col items-start">
         <Image
           src={user?.avatarUrl}
@@ -58,10 +58,10 @@ const ProfilePage = ({ user }: Props) => (
       )}
     </section>
 
-    <section className="flexStart mt-16 w-full flex-col lg:mt-28">
+    <section className="flelx mt-16 w-full flex-col items-center justify-start lg:mt-28">
       <p className="w-full text-left text-lg font-semibold">Recent Work</p>
 
-      <div className="profile_projects">
+      <div className="mt-5 grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
         {user?.projects?.edges?.map(({ node }: { node: ProjectInterface }) => (
           <ProjectCard
             key={`${node?.id}`}

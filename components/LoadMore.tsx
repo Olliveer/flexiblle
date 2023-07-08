@@ -37,7 +37,7 @@ function LoadMore({
   }
 
   return (
-    <div className="flexCenter mt-10 w-full gap-5">
+    <div className="mt-10 flex w-full items-center justify-center gap-5">
       {hasPreviousPage && (
         <Button
           type="button"

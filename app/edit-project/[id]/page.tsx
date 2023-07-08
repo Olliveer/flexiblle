@@ -18,7 +18,7 @@ async function EditProject({ params: { id } }: { params: { id: string } }) {
 
   return (
     <Modal>
-      <h3 className="modal-head-text">
+      <h3 className="w-full max-w-5xl text-left text-3xl font-extrabold md:text-5xl">
         Edit Project
         <ProjectForm type={'edit'} session={session} project={result.project} />
       </h3>

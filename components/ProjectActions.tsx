@@ -5,6 +5,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { Button } from './ui/button';
+import { Loader2 } from 'lucide-react';
 
 type ProjectActionsProps = {
   projectId: string;
@@ -33,20 +35,24 @@ function ProjectActions({ projectId }: ProjectActionsProps) {
     <>
       <Link
         href={`/edit-project/${projectId}`}
-        className="flexCenter edit-action_btn"
+        className="flex h-10 items-center justify-center rounded-lg bg-slate-300 px-4 py-2 text-sm font-medium text-gray-100"
       >
         <Image src={'/pencile.svg'} width={15} height={15} alt="edit" />
       </Link>
 
-      <button
-        type="button"
-        className={`flexCenter delete-action_btn ${
-          isDeleting ? 'bg-gray' : 'bg-primary-purple'
-        }`}
+      <Button
+        variant={'destructive'}
+        className={`flex items-center justify-center`}
         onClick={handleDelete}
       >
-        <Image src={'/trash.svg'} width={15} height={15} alt="edit" />
-      </button>
+        {isDeleting ? (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Deleting
+          </>
+        ) : (
+          <Image src={'/trash.svg'} width={15} height={15} alt="edit" />
+        )}
+      </Button>
     </>
   );
 }

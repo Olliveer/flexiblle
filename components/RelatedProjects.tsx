@@ -21,20 +21,20 @@ async function RelatedProjects({ userId, projectId }: RelatedProjectsProps) {
 
   return (
     <section className="mt-32 flex w-full flex-col">
-      <div className="flexBetween">
+      <div className="flex items-center justify-between">
         <p className="text-base font-bold">More by {result.user?.name}</p>
 
         <Link
           href={`/profile/${result.user?.id}`}
-          className="text-base text-primary-purple"
+          className="text-primary-purple text-base"
         >
           View All
         </Link>
       </div>
 
-      <div className="related_projects-grid">
+      <div className="mt-5 grid w-full grid-cols-1  gap-4  sm:grid-cols-2 md:grid-cols-3">
         {filteredProjects?.map(({ node }: { node: ProjectInterface }) => (
-          <div className="flexCenter related_project-card drop-shadow-card">
+          <div className="flex min-h-[197px] min-w-[210px] flex-col items-center justify-center rounded-2xl shadow-sm">
             <Link
               href={`/project/${node.id}`}
               key={node.id}
@@ -48,7 +48,7 @@ async function RelatedProjects({ userId, projectId }: RelatedProjectsProps) {
                 className="h-full w-full rounded-2xl object-cover"
               />
 
-              <div className="related_project-card_title hidden group-hover:flex">
+              <div className="absolute bottom-0 right-0 hidden h-1/3 w-full items-end justify-end gap-2 rounded-b-2xl bg-gradient-to-b from-transparent to-black/50 p-4 text-lg font-semibold text-white group-hover:flex">
                 <p className="w-full">{node.title}</p>
               </div>
             </Link>
