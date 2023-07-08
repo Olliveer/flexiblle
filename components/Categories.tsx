@@ -2,6 +2,8 @@
 
 import { categoryFilters } from '@/constants';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { Badge, badgeVariants } from './ui/badge';
+import { Button } from './ui/button';
 
 function Categories() {
   const router = useRouter();
@@ -14,23 +16,16 @@ function Categories() {
   }
 
   return (
-    <div className="flexBetween w-full flex-wrap gap-5">
-      <ul className="flex gap-2 overflow-auto">
-        {categoryFilters.map((filter) => (
-          <button
-            className={` ${
-              category === filter
-                ? 'bg-light-white-300 font-medium'
-                : 'font-normal'
-            } whitespace-nowrap rounded-lg px-4 py-3 capitalize`}
-            type="button"
-            key={filter}
-            onClick={() => handleTags(filter)}
-          >
-            {filter}
-          </button>
-        ))}
-      </ul>
+    <div className="flex w-full flex-wrap items-center  gap-2">
+      {categoryFilters.map((filter) => (
+        <Button
+          variant={filter === category ? 'default' : 'secondary'}
+          key={filter}
+          onClick={() => handleTags(filter)}
+        >
+          {filter}
+        </Button>
+      ))}
     </div>
   );
 }

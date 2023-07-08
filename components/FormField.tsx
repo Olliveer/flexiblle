@@ -1,3 +1,7 @@
+import { Input } from './ui/input';
+import { Label } from './ui/label';
+import { Textarea } from './ui/textarea';
+
 type FormFieldProps = {
   type?: string;
   title: string;
@@ -13,25 +17,24 @@ function FormField({
   state,
   title,
   isTextArea,
-  type = "text",
+  type = 'text',
 }: FormFieldProps) {
   return (
-    <div className="flexStart w-full flex-col gap-4">
-      <label htmlFor="" className="w-full text-gray-100">
+    <div className="flex w-full flex-col items-center justify-start gap-4">
+      <Label htmlFor={title} className="w-full">
         {title}
-      </label>
+      </Label>
       {isTextArea ? (
-        <textarea
-          className="form_field-input"
+        <Textarea
+          id={title}
           placeholder={placeholder}
           value={state}
           onChange={(event) => setState(event.target.value)}
           required
         />
       ) : (
-        <input
+        <Input
           type={type}
-          className="form_field-input"
           placeholder={placeholder}
           value={state}
           onChange={(event) => setState(event.target.value)}

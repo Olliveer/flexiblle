@@ -5,6 +5,7 @@ import LoadMore from '@/components/LoadMore';
 import ProjectCard from '@/components/ProjectCard';
 import { fecthAllProjects } from '@/lib/actions';
 import { ProjectInterface } from '@/model/global';
+import Link from 'next/link';
 
 type Edge = {
   node: ProjectInterface;
@@ -41,11 +42,20 @@ export default async function Home({
 
   if (projectsToDisplay.length === 0) {
     return (
-      <section className="flexStart paddings flex-col">
+      <section className="flex flex-col items-center justify-start px-5 py-6 lg:px-20">
         <Categories />
-        <p className="no-result-text text-center">
-          No projects found, go create some first.
-        </p>
+
+        <div className="flex h-[300px] w-full flex-col  items-center justify-center gap-4  ">
+          <p className="text-center">
+            No projects found, go create some first.
+          </p>
+          <Link
+            href={'/'}
+            className="text-md text-gray decoration-none rounded-md  px-4 py-2"
+          >
+            Go to home page
+          </Link>
+        </div>
       </section>
     );
   }
@@ -53,9 +63,9 @@ export default async function Home({
   const pagination = data.projectSearch?.pageInfo;
 
   return (
-    <section className="flex-start paddings mb-16 flex-col">
+    <section className="flex-start mb-16 flex-col px-5 py-6 lg:px-20">
       <Categories />
-      <section className="projects-grid">
+      <section className="mt-10 grid w-full grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
         {projectsToDisplay.map(({ node }: { node: ProjectInterface }) => (
           <ProjectCard
             avatarUrl={node.createdBy.avatarUrl}

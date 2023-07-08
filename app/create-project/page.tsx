@@ -12,7 +12,7 @@ async function CreateProject() {
 
   return (
     <Modal>
-      <h3 className="modal-head-text">
+      <h3 className="w-full max-w-5xl text-left text-3xl font-extrabold md:text-5xl">
         Create a New Project
         <ProjectForm type={'create'} session={session} />
       </h3>

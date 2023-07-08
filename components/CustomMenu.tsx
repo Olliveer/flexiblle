@@ -3,6 +3,7 @@
 import { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import Image from 'next/image';
+import { Label } from './ui/label';
 
 type Props = {
   title: string;
@@ -12,13 +13,13 @@ type Props = {
 };
 
 const CustomMenu = ({ title, state, filters, setState }: Props) => (
-  <div className="flexStart relative w-full flex-col gap-7">
-    <label htmlFor={title} className="w-full text-gray-100">
+  <div className="relative flex w-full flex-col items-center justify-start gap-7">
+    <Label htmlFor={title} className="w-full ">
       {title}
-    </label>
+    </Label>
     <Menu as="div" className="relative self-start">
       <div>
-        <Menu.Button className="flexCenter custom_menu-btn">
+        <Menu.Button className="bg-light-white-100 flex w-full items-center justify-center gap-4 rounded-md p-4 text-base capitalize outline-none">
           {state || 'Category'}
           <Image src="/arrow-down.svg" width={10} height={5} alt="arrow down" />
         </Menu.Button>
@@ -32,13 +33,13 @@ const CustomMenu = ({ title, state, filters, setState }: Props) => (
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="flexStart custom_menu-items">
+        <Menu.Items className="xs:min-w-[300px] border-nav-border shadow-menu absolute left-0 mt-2 flex max-h-64 w-fit origin-top-right flex-col items-center justify-start overflow-y-auto rounded-xl border bg-white">
           {filters.map((tag) => (
             <Menu.Item key={tag}>
               <button
                 type="button"
                 value={tag}
-                className="custom_menu-item"
+                className="hover:bg-light-white-100 w-full self-start whitespace-nowrap px-5 py-2 text-left text-sm capitalize"
                 onClick={(e) => setState(e.currentTarget.value)}
               >
                 {tag}

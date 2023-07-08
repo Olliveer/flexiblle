@@ -19,10 +19,10 @@ function ProjectCard({
   userId,
 }: ProjectCardProps) {
   return (
-    <div className="flexCenter drop-shadow-card flex-col rounded-2xl">
+    <div className="flex flex-col items-center justify-center rounded-2xl">
       <Link
         href={`/project/${id}`}
-        className="flexCenter group relative h-full w-full"
+        className="group relative flex h-full w-full items-center justify-center"
       >
         <Image
           src={image}
@@ -32,14 +32,14 @@ function ProjectCard({
           className="h-full w-full rounded-2xl object-cover"
         />
 
-        <div className="profile_card-title hidden group-hover:flex">
+        <div className="absolute bottom-0 right-0 hidden h-1/3 w-full items-end justify-end gap-2 rounded-b-2xl bg-gradient-to-b from-transparent to-black/50 p-4 text-lg font-semibold text-white group-hover:flex">
           <p className="w-full">{title}</p>
         </div>
       </Link>
 
-      <div className="flexBetween mt-3 w-full px-2 text-sm font-semibold">
+      <div className="mt-3 flex w-full items-center justify-between px-2 text-sm font-semibold">
         <Link href={`/profile/${userId}`}>
-          <div className="flexCenter gap-2">
+          <div className="flex items-center justify-center gap-2">
             <Image
               src={avatarUrl}
               alt={name}
@@ -51,12 +51,12 @@ function ProjectCard({
           </div>
         </Link>
 
-        <div className="flexCenter gap-3 ">
-          <div className="flexCenter gap-2">
+        <div className="flex items-center justify-center gap-3 ">
+          <div className="flex items-center justify-center gap-2">
             <Image src={'/hearth.svg'} alt="hearth" width={13} height={12} />
             <p className="text-sm">3123</p>
           </div>
-          <div className="flexCenter gap-2">
+          <div className="flex items-center justify-center gap-2">
             <Image src={'/eye.svg'} alt="eye" width={13} height={12} />
             <p className="text-sm">2313k</p>
           </div>

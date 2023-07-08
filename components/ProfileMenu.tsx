@@ -1,101 +1,85 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import Image from "next/image";
-import { signOut } from "next-auth/react";
-import { Fragment, useState } from "react";
-import { Menu, Transition } from "@headlessui/react";
-import { SessionInterface } from "@/model/global";
+import Link from 'next/link';
+import Image from 'next/image';
+import { signOut } from 'next-auth/react';
+import { Fragment, useState } from 'react';
+import { Menu, Transition } from '@headlessui/react';
+import { SessionInterface } from '@/model/global';
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuPortal,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Briefcase, Cog, LogOut, User } from 'lucide-react';
+import { Button } from './ui/button';
 
 const ProfileMenu = ({ session }: { session: SessionInterface }) => {
   const [openModal, setOpenModal] = useState(false);
 
   return (
-    <div className="flexCenter relative z-10 flex-col">
-      <Menu as="div">
-        <Menu.Button
-          className="flexCenter"
-          onMouseEnter={() => setOpenModal(true)}
-        >
-          {session?.user?.image && (
-            <Image
-              src={session.user.image}
-              width={40}
-              height={40}
-              className="rounded-full"
-              alt="user profile image"
-            />
-          )}
-        </Menu.Button>
+    <div className="relative z-10 flex flex-col items-center justify-center">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost">
+            {session?.user?.image && (
+              <Image
+                src={session.user.image}
+                width={40}
+                height={40}
+                className="rounded-full"
+                alt="user profile image"
+              />
+            )}
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="w-56">
+          <DropdownMenuLabel>My Account</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuGroup>
+            <DropdownMenuItem>
+              <Link
+                href={`/profile/${session?.user?.id}`}
+                className="flex items-center justify-start text-sm"
+              >
+                <User className="mr-2 h-4 w-4" />
+                <span>Profile</span>
+              </Link>
+              <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Briefcase className="mr-2 h-4 w-4" />
+              <span>Work Preferences</span>
+              <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Cog className="mr-2 h-4 w-4" />
+              <span>Settings</span>
+              <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
 
-        <Transition
-          show={openModal}
-          as={Fragment}
-          enter="transition ease-out duration-200"
-          enterFrom="transform opacity-0 scale-95"
-          enterTo="transform opacity-100 scale-100"
-          leave="transition ease-in duration-75"
-          leaveFrom="transform opacity-100 scale-100"
-          leaveTo="transform opacity-0 scale-95"
-        >
-          <Menu.Items
-            static
-            className="flexStart profile_menu-items"
-            onMouseLeave={() => setOpenModal(false)}
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            className="cursor-pointer"
+            onClick={() => signOut()}
           >
-            <div className="flex flex-col items-center gap-y-4">
-              {session?.user?.image && (
-                <Image
-                  src={session?.user?.image}
-                  className="rounded-full"
-                  width={80}
-                  height={80}
-                  alt="profile Image"
-                />
-              )}
-              <p className="font-semibold">{session?.user?.name}</p>
-            </div>
-
-            <div className="flex w-full flex-col items-start gap-3 pt-10">
-              <Menu.Item>
-                <Link
-                  href={`/profile/${session?.user?.id}`}
-                  className="text-sm"
-                >
-                  Work Preferences
-                </Link>
-              </Menu.Item>
-              <Menu.Item>
-                <Link
-                  href={`/profile/${session?.user?.id}`}
-                  className="text-sm"
-                >
-                  Settings
-                </Link>
-              </Menu.Item>
-              <Menu.Item>
-                <Link
-                  href={`/profile/${session?.user?.id}`}
-                  className="text-sm"
-                >
-                  Profile
-                </Link>
-              </Menu.Item>
-            </div>
-            <div className="flexStart mt-5 w-full border-t border-nav-border pt-5">
-              <Menu.Item>
-                <button
-                  type="button"
-                  className="text-sm"
-                  onClick={() => signOut()}
-                >
-                  Sign out
-                </button>
-              </Menu.Item>
-            </div>
-          </Menu.Items>
-        </Transition>
-      </Menu>
+            <LogOut className="mr-2 h-4 w-4" />
+            <span>Log out</span>
+            <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 };

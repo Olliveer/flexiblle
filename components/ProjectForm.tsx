@@ -6,9 +6,22 @@ import { ChangeEvent, FormEvent, useState } from 'react';
 import FormField from './FormField';
 import { categoryFilters } from '@/constants';
 import CustomMenu from './CustomMenu';
-import Button from './Button';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+
 import { createProject, fetchToken, updateProject } from '@/lib/actions';
 import { useRouter } from 'next/navigation';
+import { Label } from './ui/label';
+import { Button } from './ui/button';
+import { Loader2, Plus } from 'lucide-react';
+import { revalidatePath } from 'next/cache';
 
 type ProjectFormProps = {
   type: 'create' | 'edit';
@@ -42,8 +55,6 @@ function ProjectForm({ type, session, project }: ProjectFormProps) {
       }
 
       if (type === 'edit') {
-        console.log('edit', form);
-
         await updateProject(form, project?.id as string, token);
         router.push('/');
       }
@@ -80,27 +91,35 @@ function ProjectForm({ type, session, project }: ProjectFormProps) {
   };
 
   return (
-    <form onSubmit={handleFormSubmit} className="flexStart form">
-      <div className="flexStart form_image-container">
-        <label htmlFor="poster" className="flexCenter form_image-label">
+    <form
+      onSubmit={handleFormSubmit}
+      className="mx-auto flex w-full max-w-5xl flex-col items-center justify-start gap-10  pt-12 text-lg lg:pt-24"
+    >
+      <div className="relative flex min-h-[200px] w-full items-center justify-start">
+        <Label
+          htmlFor="image"
+          className="z-10 flex h-full w-full cursor-pointer items-center justify-center rounded border-2 border-dashed border-gray-200 p-20 text-center text-gray-500"
+        >
           {!form.image && 'Choose a poster for your project'}
-        </label>
+        </Label>
         <input
           type="file"
           id="image"
           accept="image/*"
           required={type === 'create'}
-          className="form_image-input"
+          className="absolute z-30 hidden h-full w-full cursor-pointer"
           onChange={handleChangeImage}
         />
 
         {form.image && (
-          <Image
-            src={form.image}
-            alt="Project Poster"
-            fill
-            className="z-20 object-contain sm:p-10"
-          />
+          <label htmlFor="image">
+            <Image
+              src={form.image}
+              alt="Project Poster"
+              fill
+              className="z-20 object-contain sm:p-10"
+            />
+          </label>
         )}
       </div>
 
@@ -111,6 +130,7 @@ function ProjectForm({ type, session, project }: ProjectFormProps) {
         setState={(value) => handleStateChange('title', value)}
       />
       <FormField
+        isTextArea
         title="Description"
         state={form.description}
         placeholder="Choose a description for your project"
@@ -132,24 +152,41 @@ function ProjectForm({ type, session, project }: ProjectFormProps) {
       />
 
       {/* custom input category */}
-      <CustomMenu
-        title="Category"
-        state={form.category}
-        filters={categoryFilters}
-        setState={(value) => handleStateChange('category', value)}
-      />
+      <div className="flex w-full items-center justify-start">
+        <Select
+          value={form.category}
+          onValueChange={(value) => handleStateChange('category', value)}
+        >
+          <SelectTrigger className="w-[180px]">
+            <SelectValue
+              className="text-gray"
+              placeholder="Select a category"
+            />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              {categoryFilters.map((category) => (
+                <SelectItem key={category} value={category}>
+                  {category}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      </div>
 
-      <div className="flexStart w-full">
-        <Button
-          title={
-            isSubmitting
-              ? `${type === 'create' ? 'Creating' : 'Updating'} Project`
-              : `${type === 'create' ? 'Create' : 'Update'} Project`
-          }
-          type="submit"
-          leftIcon={isSubmitting ? '' : '/plus.svg'}
-          isSubmitting={isSubmitting}
-        />
+      <div className="flex w-full items-center justify-start">
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? (
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            <Plus className="mr-2 h-4 w-4" />
+          )}
+
+          {isSubmitting
+            ? `${type === 'create' ? 'Creating' : 'Updating'} Project`
+            : `${type === 'create' ? 'Create' : 'Update'} Project`}
+        </Button>
       </div>
     </form>
   );
