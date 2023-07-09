@@ -20,7 +20,6 @@
     "@radix-ui/react-toast": "^1.1.4",
     "@supabase/auth-helpers-nextjs": "^0.7.2",
     "@supabase/supabase-js": "^2.26.0",
-   
     "autoprefixer": "10.4.14",
     "class-variance-authority": "^0.6.1",
     "cloudinary": "^1.37.2",
@@ -43,6 +42,8 @@
     "@types/node": "20.3.1",
     "@types/react": "18.2.14",
     "@types/react-dom": "18.2.6",
+    "eslint": "8.44.0",
+    "eslint-config-next": "13.4.9",
     "prettier": "^2.8.8",
     "prettier-plugin-tailwindcss": "^0.3.0"
   }

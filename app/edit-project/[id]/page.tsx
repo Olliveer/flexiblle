@@ -1,11 +1,8 @@
 import Modal from '@/components/Modal';
 import ProjectForm from '@/components/ProjectForm';
-import { getProjectDetails } from '@/lib/actions';
-import { getCurrentUser } from '@/lib/session';
-import { ProjectInterface } from '@/model/global';
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
-import { notFound, redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
+import { notFound, redirect } from 'next/navigation';
 
 async function EditProject({ params: { id } }: { params: { id: string } }) {
   const supabase = createServerComponentClient({ cookies });
