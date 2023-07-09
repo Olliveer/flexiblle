@@ -3,24 +3,24 @@ export const NavLinks = [
   { href: '/', key: 'Find Projects', text: 'Find Projects' },
   { href: '/', key: 'Learn Development', text: 'Learn Development' },
   { href: '/', key: 'Career Advancement', text: 'Career Advancement' },
-  { href: '/', key: 'Hire Developers', text: 'Hire Developers' }
+  { href: '/', key: 'Hire Developers', text: 'Hire Developers' },
 ];
 
 export const categoryFilters = [
-  "Frontend",
-  "Backend",
-  "Full-Stack",
-  "Mobile",
-  "UI/UX",
-  "Game Dev",
-  "DevOps",
-  "Data Science",
-  "Machine Learning",
-  "Cybersecurity",
-  "Blockchain",
-  "E-commerce",
-  "Chatbots"
-]
+  'Frontend',
+  'Backend',
+  'Full-Stack',
+  'Mobile',
+  'UI/UX',
+  'Game Dev',
+  'DevOps',
+  'Data Science',
+  'Machine Learning',
+  'Cybersecurity',
+  'Blockchain',
+  'E-commerce',
+  'Chatbots',
+];
 
 export const footerLinks = [
   {
@@ -45,9 +45,7 @@ export const footerLinks = [
   },
   {
     title: 'Brands',
-    links: [
-      'Advertise with us',
-    ],
+    links: ['Advertise with us'],
   },
   {
     title: 'Company',

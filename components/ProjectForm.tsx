@@ -22,22 +22,25 @@ import { Label } from './ui/label';
 import { Button } from './ui/button';
 import { Loader2, Plus } from 'lucide-react';
 import { revalidatePath } from 'next/cache';
+import { Session } from '@supabase/supabase-js';
+import { useToast } from './ui/use-toast';
 
 type ProjectFormProps = {
   type: 'create' | 'edit';
-  session: SessionInterface;
+  session: Session;
   project?: ProjectInterface;
 };
 
 function ProjectForm({ type, session, project }: ProjectFormProps) {
+  const { toast } = useToast();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [form, setForm] = useState({
     title: project?.title || '',
     description: project?.description || '',
     image: project?.image || '',
-    liveSiteUrl: project?.liveSiteUrl || '',
-    githubUrl: project?.githubUrl || '',
+    liveSiteUrl: project?.live_site_url || '',
+    githubUrl: project?.github_url || '',
     category: project?.category || '',
   });
 
@@ -46,16 +49,30 @@ function ProjectForm({ type, session, project }: ProjectFormProps) {
 
     setIsSubmitting(true);
 
-    const { token } = await fetchToken();
-
     try {
       if (type === 'create') {
-        await createProject(form, session?.user?.id, token);
+        const { status } = await createProject(
+          form,
+          session?.user.id as string
+        );
+        if (status === 201) {
+          toast({
+            title: 'Project created successfully',
+            description: 'Your project has been created successfully',
+          });
+        }
         router.push('/');
       }
 
       if (type === 'edit') {
-        await updateProject(form, project?.id as string, token);
+        const { status } = await updateProject(form, project?.id as string);
+        if (status === 204) {
+          toast({
+            title: 'Project updated successfully',
+            description: 'Your project has been updated successfully',
+          });
+        }
+
         router.push('/');
       }
     } catch (error) {
