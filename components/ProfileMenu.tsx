@@ -1,11 +1,7 @@
 'use client';
 
-import Link from 'next/link';
 import Image from 'next/image';
-import { signOut } from 'next-auth/react';
-import { Fragment, useState } from 'react';
-import { Menu, Transition } from '@headlessui/react';
-import { SessionInterface } from '@/model/global';
+import Link from 'next/link';
 
 import {
   DropdownMenu,
@@ -13,19 +9,15 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuPortal,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Briefcase, Cog, LogOut, User } from 'lucide-react';
-import { Button } from './ui/button';
-import { Session } from '@supabase/supabase-js';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { Session } from '@supabase/supabase-js';
+import { Briefcase, Cog, LogOut, User } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { Button } from './ui/button';
 
 export default function ({ session }: { session: Session }) {
   const router = useRouter();

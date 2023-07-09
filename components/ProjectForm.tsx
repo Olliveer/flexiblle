@@ -1,28 +1,25 @@
 'use client';
 
-import { FormState, ProjectInterface, SessionInterface } from '@/model/global';
-import Image from 'next/image';
-import { ChangeEvent, FormEvent, useState } from 'react';
-import FormField from './FormField';
-import { categoryFilters } from '@/constants';
-import CustomMenu from './CustomMenu';
 import {
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { categoryFilters } from '@/constants';
+import { FormState, ProjectInterface } from '@/model/global';
+import Image from 'next/image';
+import { ChangeEvent, FormEvent, useState } from 'react';
+import FormField from './FormField';
 
-import { createProject, fetchToken, updateProject } from '@/lib/actions';
-import { useRouter } from 'next/navigation';
-import { Label } from './ui/label';
-import { Button } from './ui/button';
-import { Loader2, Plus } from 'lucide-react';
-import { revalidatePath } from 'next/cache';
+import { createProject, updateProject } from '@/lib/actions';
 import { Session } from '@supabase/supabase-js';
+import { Loader2, Plus } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { Button } from './ui/button';
+import { Label } from './ui/label';
 import { useToast } from './ui/use-toast';
 
 type ProjectFormProps = {

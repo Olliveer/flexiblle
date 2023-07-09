@@ -1,14 +1,11 @@
 import { NavLinks } from '@/constants';
+import { cookies } from 'next/headers';
 import Image from 'next/image';
 import Link from 'next/link';
 import AuthProviders from './AuthProviders';
 import ProfileMenu from './ProfileMenu';
-import { cookies } from 'next/headers';
 
-import {
-  createClientComponentClient,
-  createServerComponentClient,
-} from '@supabase/auth-helpers-nextjs';
+import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 
 async function Navbar() {
   const supabase = createServerComponentClient({ cookies });

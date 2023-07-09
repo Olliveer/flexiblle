@@ -1,8 +1,5 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
-import * as z from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -14,15 +11,17 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Profile } from '@/model/global';
-import Image from 'next/image';
-import { Edit, Loader2, X } from 'lucide-react';
-import { ChangeEvent, use, useState } from 'react';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import { isBase64DataURL } from '@/lib/utils';
 import { uploadImage } from '@/lib/actions';
+import { isBase64DataURL } from '@/lib/utils';
+import { Profile } from '@/model/global';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { Edit, Loader2 } from 'lucide-react';
+import Image from 'next/image';
+import { ChangeEvent, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
 import { useToast } from './ui/use-toast';
-import { ToastAction } from './ui/toast';
 
 const formSchema = z.object({
   avatar_url: z.string().url(),
