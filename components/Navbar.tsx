@@ -2,12 +2,20 @@ import { NavLinks } from '@/constants';
 import Image from 'next/image';
 import Link from 'next/link';
 import AuthProviders from './AuthProviders';
-import { getCurrentUser } from '@/lib/session';
-import { signOut } from 'next-auth/react';
 import ProfileMenu from './ProfileMenu';
+import { cookies } from 'next/headers';
+
+import {
+  createClientComponentClient,
+  createServerComponentClient,
+} from '@supabase/auth-helpers-nextjs';
 
 async function Navbar() {
-  const session = await getCurrentUser();
+  const supabase = createServerComponentClient({ cookies });
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
 
   return (
     <nav className="border-nav-border flex items-center justify-between gap-4 border-b px-8 py-5">
@@ -26,7 +34,7 @@ async function Navbar() {
       </div>
 
       <div className="flex items-center justify-normal gap-4">
-        {session?.user ? (
+        {session ? (
           <>
             <ProfileMenu session={session} />
             <Link href={'/create-project'}>Share Work</Link>

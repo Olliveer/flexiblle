@@ -1,7 +1,10 @@
 import { getUserProjects } from '@/lib/actions';
 import { ProjectInterface, UserProfile } from '@/model/global';
+import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import Image from 'next/image';
 import Link from 'next/link';
+import { cookies } from 'next/headers';
+import { notFound } from 'next/navigation';
 
 type RelatedProjectsProps = {
   userId: string;
@@ -9,23 +12,42 @@ type RelatedProjectsProps = {
 };
 
 async function RelatedProjects({ userId, projectId }: RelatedProjectsProps) {
-  const result = (await getUserProjects(userId)) as {
-    user?: UserProfile;
-  };
+  const supabase = createServerComponentClient({ cookies });
 
-  const filteredProjects = result?.user?.projects?.edges?.filter(
-    ({ node }: { node: ProjectInterface }) => node.id !== projectId
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  const { data, error } = await supabase
+    .from('projects')
+    .select('*, profiles(*)')
+    .eq('user_id', userId)
+    .limit(3);
+
+  const filteredProjects = data?.filter(
+    (project: ProjectInterface) => project.id !== projectId
   );
 
   if (filteredProjects?.length === 0) return null;
 
+  if (error) {
+    console.log(error);
+    return null;
+  }
+
+  if (!data) {
+    return notFound();
+  }
+
   return (
     <section className="mt-32 flex w-full flex-col">
       <div className="flex items-center justify-between">
-        <p className="text-base font-bold">More by {result.user?.name}</p>
+        <p className="text-base font-bold">
+          More by {session?.user?.user_metadata?.full_name}
+        </p>
 
         <Link
-          href={`/profile/${result.user?.id}`}
+          href={`/profile/${userId}`}
           className="text-primary-purple text-base"
         >
           View All
@@ -33,23 +55,23 @@ async function RelatedProjects({ userId, projectId }: RelatedProjectsProps) {
       </div>
 
       <div className="mt-5 grid w-full grid-cols-1  gap-4  sm:grid-cols-2 md:grid-cols-3">
-        {filteredProjects?.map(({ node }: { node: ProjectInterface }) => (
+        {filteredProjects?.map((data: ProjectInterface) => (
           <div className="flex min-h-[197px] min-w-[210px] flex-col items-center justify-center rounded-2xl shadow-sm">
             <Link
-              href={`/project/${node.id}`}
-              key={node.id}
+              href={`/project/${data.id}`}
+              key={data.id}
               className="flexCenter group relative h-full w-full"
             >
               <Image
-                src={node.image}
-                alt={node.title}
+                src={data.image}
+                alt={data.title}
                 width={414}
                 height={214}
                 className="h-full w-full rounded-2xl object-cover"
               />
 
               <div className="absolute bottom-0 right-0 hidden h-1/3 w-full items-end justify-end gap-2 rounded-b-2xl bg-gradient-to-b from-transparent to-black/50 p-4 text-lg font-semibold text-white group-hover:flex">
-                <p className="w-full">{node.title}</p>
+                <p className="w-full">{data.title}</p>
               </div>
             </Link>
           </div>

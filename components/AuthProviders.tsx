@@ -1,42 +1,24 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { getProviders, signIn, signOut } from 'next-auth/react';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { useRouter } from 'next/navigation';
 import { Button } from './ui/button';
 
-type Provider = {
-  id: string;
-  name: string;
-  signinUrl: string;
-  callbackUrl: string;
-  siginUrlParams?: Record<string, string> | null;
-};
-
-type Providers = Record<string, Provider>;
-
 function AuthProviders() {
-  const [providers, setproviders] = useState<Providers | null>(null);
+  const router = useRouter();
+  const supabase = createClientComponentClient();
 
-  useEffect(() => {
-    const fetchProviders = async () => {
-      const response = await getProviders();
+  async function handleSignIn() {
+    const { data } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+    });
 
-      setproviders(response);
-    };
-    fetchProviders();
-  }, []);
-
-  if (providers) {
-    return (
-      <div>
-        {Object.values(providers).map((provider, index) => (
-          <Button key={index} onClick={() => signIn(provider.id)}>
-            Sign in with {provider.name}
-          </Button>
-        ))}
-      </div>
-    );
+    if (data) {
+      router.push('/');
+    }
   }
+
+  return <Button onClick={() => handleSignIn()}>Sign in with google</Button>;
 }
 
 export default AuthProviders;

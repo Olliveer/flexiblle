@@ -18,10 +18,8 @@ function ProjectActions({ projectId }: ProjectActionsProps) {
   async function handleDelete() {
     setisDeleting(true);
 
-    const { token } = await fetchToken();
-
     try {
-      await deleteProject(projectId, token);
+      await deleteProject(projectId);
 
       router.push('/');
     } catch (error) {

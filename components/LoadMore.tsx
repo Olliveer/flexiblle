@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import Button from './Button';
+import { Button } from './ui/button';
 
 type LoadMoreProps = {
   startCursor: string;
@@ -38,20 +38,8 @@ function LoadMore({
 
   return (
     <div className="mt-10 flex w-full items-center justify-center gap-5">
-      {hasPreviousPage && (
-        <Button
-          type="button"
-          title="First Page"
-          handleClick={() => handleNavigation('first')}
-        />
-      )}
-      {hasNextPage && (
-        <Button
-          type="button"
-          title="Next Page"
-          handleClick={() => handleNavigation('next')}
-        />
-      )}
+      {hasPreviousPage && <Button>Prev</Button>}
+      {hasNextPage && <Button>Next</Button>}
     </div>
   );
 }

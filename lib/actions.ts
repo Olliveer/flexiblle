@@ -1,58 +1,14 @@
-import {
-  createProjectMutation,
-  createUserMutation,
-  deleteProjectMutation,
-  getProjectByIdQuery,
-  getProjectsOfUserQuery,
-  getUserQuery,
-  projectsQuery,
-  updateProjectMutation,
-} from '@/graphql';
 import { ProjectForm } from '@/model/global';
-import { GraphQLClient } from 'graphql-request';
-import { headers } from 'next/dist/client/components/headers';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { isBase64DataURL } from './utils';
 
 const isProduction = process.env.NODE_ENV === 'production';
-const apiUrl = isProduction
-  ? (process.env.NEXT_PUBLIC_GRAFBASE_URL as string)
-  : 'http://127.0.0.1:4000/graphql';
-
-const apiKey = isProduction
-  ? (process.env.NEXT_PUBLIC_GRAFBASE_KEY as string)
-  : 'letmein';
 
 const serverUrl = isProduction
   ? (process.env.NEXT_PUBLIC_SERVER_URL as string)
   : 'http://localhost:3000';
 
-const client = new GraphQLClient(apiUrl);
-
-const makeGraphQLRequest = async (query: string, variables = {}) => {
-  try {
-    // client.request
-    return await client.request(query, variables);
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const getUser = (email: string) => {
-  client.setHeader('x-api-key', apiKey);
-  return makeGraphQLRequest(getUserQuery, { email });
-};
-
-export const createUser = (name: string, email: string, avatarUrl: string) => {
-  client.setHeader('x-api-key', apiKey);
-  const variables = {
-    input: {
-      name,
-      email,
-      avatarUrl,
-    },
-  };
-
-  return makeGraphQLRequest(createUserMutation, variables);
-};
+const supabase = createClientComponentClient();
 
 export const fetchToken = async () => {
   try {
@@ -81,65 +37,70 @@ export const uploadImage = async (imagePath: string) => {
   }
 };
 
-export const createProject = async (
-  form: ProjectForm,
-  creatorId: string,
-  token: string
-) => {
+// grafbase
+// export const createProject = async (
+//   form: ProjectForm,
+//   creatorId: string,
+//   token: string
+// ) => {
+//   const imageUrl = await uploadImage(form.image);
+
+//   if (imageUrl.url) {
+//     client.setHeader('Authorization', `Bearer ${token}`);
+//     const variables = {
+//       input: {
+//         ...form,
+//         image: imageUrl.url,
+//         createdBy: {
+//           link: creatorId,
+//         },
+//       },
+//     };
+
+//     return makeGraphQLRequest(createProjectMutation, variables);
+//   }
+// };
+
+// supabase
+export const createProject = async (form: ProjectForm, creatorId: string) => {
   const imageUrl = await uploadImage(form.image);
 
   if (imageUrl.url) {
-    client.setHeader('Authorization', `Bearer ${token}`);
-    const variables = {
-      input: {
-        ...form,
-        image: imageUrl.url,
-        createdBy: {
-          link: creatorId,
-        },
-      },
-    };
-
-    return makeGraphQLRequest(createProjectMutation, variables);
+    return supabase.from('projects').insert({
+      title: form.title,
+      description: form.description,
+      image: imageUrl.url,
+      user_id: creatorId,
+      github_url: form.githubUrl,
+      live_site_url: form.liveSiteUrl,
+      category: form.category,
+    });
   }
+
+  return supabase.from('projects').insert({
+    title: form.title,
+    description: form.description,
+    image: '',
+    user_id: creatorId,
+    github_url: form.githubUrl,
+    live_site_url: form.liveSiteUrl,
+    category: form.category,
+  });
 };
 
+// supabase
 export const fecthAllProjects = async (
   category?: string,
   endCursor?: string
 ) => {
-  client.setHeader('x-api-key', apiKey);
-
-  return makeGraphQLRequest(projectsQuery, { category, endCursor });
+  return supabase.from('projects').select('*, profiles(*)');
 };
 
-export const getProjectDetails = async (id: string) => {
-  client.setHeader('x-api-key', apiKey);
-
-  return makeGraphQLRequest(getProjectByIdQuery, { id });
-};
-export const getUserProjects = async (id: string, last?: number) => {
-  client.setHeader('x-api-key', apiKey);
-
-  return makeGraphQLRequest(getProjectsOfUserQuery, { id, last });
+export const deleteProject = async (id: string) => {
+  return supabase.from('projects').delete().eq('id', id);
 };
 
-export const deleteProject = async (id: string, token: string) => {
-  client.setHeader('Authorization', `Bearer ${token}`);
-
-  return makeGraphQLRequest(deleteProjectMutation, { id });
-};
-
-export const updateProject = async (
-  form: ProjectForm,
-  projectId: string,
-  token: string
-) => {
-  function isBase64DataURL(value: string) {
-    const base64Regex = /^data:image\/[a-z]+;base64,/;
-    return base64Regex.test(value);
-  }
-
+export const updateProject = async (form: ProjectForm, projectId: string) => {
   let updatedForm = { ...form };
 
   const isUploadingNewImage = isBase64DataURL(form.image);
@@ -155,12 +116,15 @@ export const updateProject = async (
     }
   }
 
-  client.setHeader('Authorization', `Bearer ${token}`);
-
-  const variables = {
-    id: projectId,
-    input: updatedForm,
-  };
-
-  return makeGraphQLRequest(updateProjectMutation, variables);
+  return supabase
+    .from('projects')
+    .update({
+      title: updatedForm.title,
+      description: updatedForm.description,
+      image: updatedForm.image,
+      github_url: updatedForm.githubUrl,
+      live_site_url: updatedForm.liveSiteUrl,
+      category: updatedForm.category,
+    })
+    .match({ id: projectId });
 };

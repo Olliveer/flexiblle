@@ -23,18 +23,32 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Briefcase, Cog, LogOut, User } from 'lucide-react';
 import { Button } from './ui/button';
+import { Session } from '@supabase/supabase-js';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { useRouter } from 'next/navigation';
 
-const ProfileMenu = ({ session }: { session: SessionInterface }) => {
-  const [openModal, setOpenModal] = useState(false);
+export default function ({ session }: { session: Session }) {
+  const router = useRouter();
+  const supabase = createClientComponentClient();
+
+  async function handleSignOut() {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.log(error);
+      return;
+    }
+
+    router.refresh();
+  }
 
   return (
     <div className="relative z-10 flex flex-col items-center justify-center">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost">
-            {session?.user?.image && (
+            {session?.user?.user_metadata.avatar_url && (
               <Image
-                src={session.user.image}
+                src={session?.user?.user_metadata.avatar_url}
                 width={40}
                 height={40}
                 className="rounded-full"
@@ -72,7 +86,7 @@ const ProfileMenu = ({ session }: { session: SessionInterface }) => {
           <DropdownMenuSeparator />
           <DropdownMenuItem
             className="cursor-pointer"
-            onClick={() => signOut()}
+            onClick={() => handleSignOut()}
           >
             <LogOut className="mr-2 h-4 w-4" />
             <span>Log out</span>
@@ -82,6 +96,4 @@ const ProfileMenu = ({ session }: { session: SessionInterface }) => {
       </DropdownMenu>
     </div>
   );
-};
-
-export default ProfileMenu;
+}

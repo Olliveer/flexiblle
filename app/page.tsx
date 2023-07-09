@@ -1,32 +1,21 @@
-'use client';
-
 import Categories from '@/components/Categories';
 import LoadMore from '@/components/LoadMore';
 import ProjectCard from '@/components/ProjectCard';
 import { fecthAllProjects } from '@/lib/actions';
-import { ProjectInterface } from '@/model/global';
+import type { ProjectInterface } from '@/model/global';
+import {
+  createClientComponentClient,
+  createServerComponentClient,
+} from '@supabase/auth-helpers-nextjs';
 import Link from 'next/link';
-
-type Edge = {
-  node: ProjectInterface;
-};
-
-type ProjectsSearch = {
-  projectSearch: {
-    edges: Edge[];
-    pageInfo: {
-      hasPreviousPage: boolean;
-      hasNextPage: boolean;
-      startCursor: string;
-      endCursor: string;
-    };
-  };
-};
+import { cookies } from 'next/headers';
+import { Button } from '@/components/ui/button';
+import { getPagination } from '@/lib/utils';
 
 type HomeProps = {
   searchParams: {
     category?: string;
-    endCursor?: string;
+    page?: string;
   };
 };
 
@@ -35,12 +24,26 @@ export const dynamicParams = true;
 export const revalidate = 0;
 
 export default async function Home({
-  searchParams: { category, endCursor },
+  searchParams: { category, page },
 }: HomeProps) {
-  const data = (await fecthAllProjects(category, endCursor)) as ProjectsSearch;
-  const projectsToDisplay = data.projectSearch?.edges || [];
+  const supabase = createServerComponentClient({ cookies });
 
-  if (projectsToDisplay.length === 0) {
+  let query = supabase
+    .from('projects')
+    .select('*, profiles(*)')
+    .order('created_at', { ascending: false });
+
+  if (category) {
+    query = query.eq('category', category);
+  }
+
+  query = query;
+
+  const { data, error, count } = await query;
+
+  console.log(data?.length);
+
+  if (!data) {
     return (
       <section className="flex flex-col items-center justify-start px-5 py-6 lg:px-20">
         <Categories />
@@ -60,30 +63,24 @@ export default async function Home({
     );
   }
 
-  const pagination = data.projectSearch?.pageInfo;
-
   return (
     <section className="flex-start mb-16 flex-col px-5 py-6 lg:px-20">
       <Categories />
       <section className="mt-10 grid w-full grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
-        {projectsToDisplay.map(({ node }: { node: ProjectInterface }) => (
+        {data?.map((project: ProjectInterface) => (
           <ProjectCard
-            avatarUrl={node.createdBy.avatarUrl}
-            key={node.id}
-            image={node.image}
-            name={node.createdBy.name}
-            title={node.title}
-            userId={node.createdBy.id}
-            id={node.id}
+            avatarUrl={project.profiles.avatar_url}
+            key={project.id}
+            image={project.image}
+            name={project.profiles.full_name}
+            title={project.title}
+            userId={project.user_id}
+            id={project.id}
           />
         ))}
       </section>
-      <LoadMore
-        startCursor={pagination.startCursor}
-        endCursor={pagination.endCursor}
-        hasNextPage={pagination.hasNextPage}
-        hasPreviousPage={pagination.hasPreviousPage}
-      />
+
+      {/* <LoadMore /> */}
     </section>
   );
 }
