@@ -2,7 +2,6 @@
 
 import { categoryFilters } from '@/constants';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { Badge, badgeVariants } from './ui/badge';
 import { Button } from './ui/button';
 
 function Categories() {

@@ -1,9 +1,8 @@
-import { getUserProjects } from '@/lib/actions';
-import { ProjectInterface, UserProfile } from '@/model/global';
+import { ProjectInterface } from '@/model/global';
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
+import { cookies } from 'next/headers';
 import Image from 'next/image';
 import Link from 'next/link';
-import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 
 type RelatedProjectsProps = {

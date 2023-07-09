@@ -1,12 +1,12 @@
 'use client';
 
-import { deleteProject, fetchToken } from '@/lib/actions';
+import { deleteProject } from '@/lib/actions';
+import { Loader2 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Button } from './ui/button';
-import { Loader2 } from 'lucide-react';
 
 type ProjectActionsProps = {
   projectId: string;
