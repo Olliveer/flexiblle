@@ -1,12 +1,9 @@
 import Modal from '@/components/Modal';
 import ProjectForm from '@/components/ProjectForm';
-import { getCurrentUser } from '@/lib/session';
-import {
-  createClientComponentClient,
-  createServerComponentClient,
-} from '@supabase/auth-helpers-nextjs';
-import { redirect } from 'next/navigation';
+
+import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 
 async function CreateProject() {
   const supabase = createServerComponentClient({ cookies });
