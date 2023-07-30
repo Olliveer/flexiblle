@@ -53,7 +53,7 @@ async function RelatedProjects({ userId, projectId }: RelatedProjectsProps) {
         </Link>
       </div>
 
-      <div className="mt-5 grid w-full grid-cols-1  gap-4  sm:grid-cols-2 md:grid-cols-3">
+      <div className="mt-5 grid w-full grid-cols-1  gap-4  sm:grid-cols-2 md:grid-cols-2">
         {filteredProjects?.map((data: ProjectInterface) => (
           <div className="flex min-h-[197px] min-w-[210px] flex-col items-center justify-center rounded-2xl shadow-sm">
             <Link

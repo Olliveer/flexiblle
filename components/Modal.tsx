@@ -24,7 +24,7 @@ function Modal({ children }: { children: ReactNode }) {
 
   return (
     <Dialog modal onOpenChange={handleClick} open={modalIsOpen}>
-      <DialogContent className=" h-[800px] w-[400px] overflow-auto md:h-[900px] md:min-w-[800px] ">
+      <DialogContent className="h-[calc(100vh_-_20px)]  overflow-auto lg:min-w-[800px]  ">
         <DialogHeader>
           <DialogDescription className="py-10 ">{children}</DialogDescription>
         </DialogHeader>
